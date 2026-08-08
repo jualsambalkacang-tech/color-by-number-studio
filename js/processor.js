@@ -18,7 +18,19 @@ class ImageProcessor {
         );
 
     }
+applyQuantization(level = 6){
 
+    const quantizer = new ColorQuantizer(level);
+
+    let imageData = this.getImageData();
+
+    imageData = quantizer.quantize(imageData);
+
+    this.ctx.putImageData(imageData,0,0);
+
+    return imageData;
+
+}
     simplify(level = 64){
 
         const imageData = this.getImageData();
