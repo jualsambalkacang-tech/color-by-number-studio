@@ -41,6 +41,7 @@ img.onload = function(){
         canvas.height
     );
 simplifyColors(64);
+    console.log(getPixel(10,10));
     canvas.style.display = "block";
 
 };
