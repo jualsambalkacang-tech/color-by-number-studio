@@ -61,3 +61,30 @@ nextBtn.addEventListener("click", function () {
     alert("Sprint 2 selesai 🎉\n\nSelanjutnya kita akan mengubah gambar menjadi Color by Number.");
 
 });
+function simplifyColors(level = 64){
+
+    const imageData = ctx.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    const data = imageData.data;
+
+    for(let i=0;i<data.length;i+=4){
+
+        data[i] =
+        Math.round(data[i]/level)*level;
+
+        data[i+1] =
+        Math.round(data[i+1]/level)*level;
+
+        data[i+2] =
+        Math.round(data[i+2]/level)*level;
+
+    }
+
+    ctx.putImageData(imageData,0,0);
+
+}
