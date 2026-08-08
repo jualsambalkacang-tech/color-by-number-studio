@@ -1,3 +1,5 @@
+let imageData = null;
+let regions = [];
 const canvas = document.getElementById("imageCanvas");
 const ctx = canvas.getContext("2d");
 const imageInput = document.getElementById("imageInput");
@@ -63,7 +65,7 @@ nextBtn.addEventListener("click", function () {
 });
 function simplifyColors(level = 64){
 
-    const imageData = ctx.getImageData(
+    imageData = ctx.getImageData(...)
         0,
         0,
         canvas.width,
@@ -86,5 +88,34 @@ function simplifyColors(level = 64){
     }
 
     ctx.putImageData(imageData,0,0);
+
+}
+function getPixel(x,y){
+
+    const index =
+        (y * imageData.width + x) * 4;
+
+    return {
+
+        r:imageData.data[index],
+
+        g:imageData.data[index+1],
+
+        b:imageData.data[index+2]
+
+    };
+
+}
+function sameColor(a,b){
+
+    return (
+
+        a.r===b.r &&
+
+        a.g===b.g &&
+
+        a.b===b.b
+
+    );
 
 }
