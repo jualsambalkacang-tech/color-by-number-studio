@@ -1,1 +1,86 @@
 
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+  background:#f5f5f5;
+  color:#333;
+}
+
+.header{
+  background:#4A90E2;
+  color:white;
+  padding:18px;
+  text-align:center;
+  font-size:20px;
+  font-weight:bold;
+  box-shadow:0 2px 6px rgba(0,0,0,.15);
+}
+
+.container{
+  max-width:600px;
+  margin:20px auto;
+  padding:16px;
+}
+
+.upload-card{
+  background:white;
+  border-radius:16px;
+  padding:20px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.upload-card h2{
+  margin-bottom:15px;
+}
+
+input[type=file]{
+  width:100%;
+  padding:12px;
+  border:2px dashed #4A90E2;
+  border-radius:12px;
+  background:#fafafa;
+  cursor:pointer;
+}
+
+.preview{
+  margin-top:20px;
+  min-height:250px;
+  border:2px dashed #ddd;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  background:#fafafa;
+}
+
+.preview img{
+  max-width:100%;
+  max-height:400px;
+  display:none;
+}
+
+#emptyText{
+  color:#888;
+}
+
+button{
+  width:100%;
+  margin-top:20px;
+  padding:15px;
+  border:none;
+  border-radius:12px;
+  background:#4A90E2;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+}
+
+button:disabled{
+  background:#bdbdbd;
+}
