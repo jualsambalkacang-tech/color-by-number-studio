@@ -38,7 +38,7 @@ img.onload = function(){
         canvas.width,
         canvas.height
     );
-
+simplifyColors(64);
     canvas.style.display = "block";
 
 };
