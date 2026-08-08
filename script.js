@@ -42,7 +42,7 @@ img.onload = function(){
     );
 const processor = new ImageProcessor(canvas);
 
-processor.simplify(64);
+processor.applyQuantization(6);
     console.log(getPixel(10,10));
     canvas.style.display = "block";
 
