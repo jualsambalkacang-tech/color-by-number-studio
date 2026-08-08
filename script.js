@@ -1,4 +1,5 @@
-
+const canvas = document.getElementById("imageCanvas");
+const ctx = canvas.getContext("2d");
 const imageInput = document.getElementById("imageInput");
 const previewImage = document.getElementById("previewImage");
 const emptyText = document.getElementById("emptyText");
