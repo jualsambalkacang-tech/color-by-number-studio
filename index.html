@@ -1,1 +1,42 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Color by Number Studio</title>
 
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <h1>🎨 Color by Number Studio</h1>
+</header>
+
+<main class="container">
+
+  <div class="upload-card">
+    <h2>Upload Gambar</h2>
+
+    <input
+      type="file"
+      id="imageInput"
+      accept="image/*">
+
+    <div class="preview">
+      <img id="previewImage" alt="Preview gambar">
+      <p id="emptyText">Belum ada gambar dipilih</p>
+    </div>
+
+    <button id="nextBtn" disabled>
+      Lanjut
+    </button>
+
+  </div>
+
+</main>
+
+<script src="script.js"></script>
+
+</body>
+</html>
