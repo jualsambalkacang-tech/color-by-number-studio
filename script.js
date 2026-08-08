@@ -41,8 +41,13 @@ img.onload = function(){
         canvas.height
     );
 const processor = new ImageProcessor(canvas);
-
+const imageData =
 processor.applyQuantization(6);
+    const detector = new RegionDetector(imageData);
+
+const regions = detector.detect();
+
+console.log(regions);
     console.log(getPixel(10,10));
     canvas.style.display = "block";
 
