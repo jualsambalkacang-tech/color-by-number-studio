@@ -40,7 +40,9 @@ img.onload = function(){
         canvas.width,
         canvas.height
     );
-simplifyColors(64);
+const processor = new ImageProcessor(canvas);
+
+processor.simplify(64);
     console.log(getPixel(10,10));
     canvas.style.display = "block";
 
