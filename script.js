@@ -20,6 +20,30 @@ imageInput.addEventListener("change", function (event) {
     reader.onload = function (e) {
 
         previewImage.src = e.target.result;
+        const img = new Image();
+
+img.onload = function(){
+
+    const maxWidth = 600;
+
+    const scale = maxWidth / img.width;
+
+    canvas.width = maxWidth;
+    canvas.height = img.height * scale;
+
+    ctx.drawImage(
+        img,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    canvas.style.display = "block";
+
+};
+
+img.src = e.target.result;
         previewImage.style.display = "block";
 
         emptyText.style.display = "none";
