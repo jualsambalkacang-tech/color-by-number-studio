@@ -50,30 +50,24 @@ class RegionDetector {
 
             for(let x = 0; x < this.width; x++){
 
-                const startIndex = this.getIndex(x, y);
+                const index = this.getIndex(x, y);
 
-                if(this.visited[startIndex]){
+                if(this.visited[index]){
                     continue;
                 }
 
-                const region = this.floodFill(
-                    x,
-                    y,
-                    startIndex
-                );
+                const region = this.floodFill(x, y, index);
 
                 if(region.pixels.length >= this.minRegionSize){
 
                     this.regions.push(region);
 
                 }
-
             }
-
         }
 
         console.log(
-            "Jumlah region:",
+            "Jumlah bidang:",
             this.regions.length
         );
 
@@ -82,17 +76,15 @@ class RegionDetector {
 
     floodFill(startX, startY, startIndex){
 
-        const queue = [];
-
+        const queue = [startIndex];
         const pixels = [];
 
         let queuePosition = 0;
 
-        queue.push(startIndex);
-
         this.visited[startIndex] = 1;
 
-        const color = this.getColor(startIndex);
+        let totalX = 0;
+        let totalY = 0;
 
         while(queuePosition < queue.length){
 
@@ -108,6 +100,9 @@ class RegionDetector {
                 Math.floor(
                     currentIndex / this.width
                 );
+
+            totalX += x;
+            totalY += y;
 
             const neighbors = [
 
@@ -146,25 +141,81 @@ class RegionDetector {
                     this.visited[neighborIndex] = 1;
 
                     queue.push(neighborIndex);
-
                 }
-
             }
-
         }
+
+        const size = pixels.length;
 
         return {
 
             id: this.regions.length + 1,
 
-            color: color,
+            color: this.getColor(startIndex),
 
             pixels: pixels,
 
-            size: pixels.length
+            size: size,
+
+            centerX: Math.round(totalX / size),
+
+            centerY: Math.round(totalY / size)
 
         };
-
     }
+    
+    drawBoundaries(ctx){
 
+        const output =
+            ctx.createImageData(
+                this.width,
+                this.height
+            );
+
+        const outputData = output.data;
+
+        for(let y = 0; y < this.height; y++){
+
+            for(let x = 0; x < this.width; x++){
+
+                const index =
+                    this.getIndex(x, y);
+
+                let boundary = false;
+
+                if(x < this.width - 1){
+
+                    const right =
+                        this.getIndex(x + 1, y);
+
+                    if(!this.sameColor(index, right)){
+                        boundary = true;
+                    }
+                }
+
+                if(y < this.height - 1){
+
+                    const bottom =
+                        this.getIndex(x, y + 1);
+
+                    if(!this.sameColor(index, bottom)){
+                        boundary = true;
+                    }
+                }
+
+                if(boundary){
+
+                    const i = index * 4;
+
+                    outputData[i] = 0;
+                    outputData[i + 1] = 0;
+                    outputData[i + 2] = 0;
+                    outputData[i + 3] = 255;
+
+                }
+            }
+        }
+
+        ctx.putImageData(output, 0, 0);
+    }
 }
