@@ -51,7 +51,7 @@ console.log("Total bidang:", regions.length);
     const detector = new RegionDetector(imageData);
 
 const regions = detector.detect();
-
+detector.drawBoundaries(ctx);
 console.log(regions);
     console.log(getPixel(10,10));
     canvas.style.display = "block";
