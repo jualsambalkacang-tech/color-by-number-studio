@@ -8,7 +8,9 @@ class RegionDetector {
         this.data = imageData.data;
 
         this.minRegionSize = minRegionSize;
+
         this.regions = [];
+        this.palette = [];
 
         this.visited = new Uint8Array(
             this.width * this.height
@@ -30,6 +32,11 @@ class RegionDetector {
         };
     }
 
+    colorKey(color){
+
+        return `${color.r},${color.g},${color.b}`;
+    }
+
     sameColor(indexA, indexB){
 
         const a = indexA * 4;
@@ -46,6 +53,8 @@ class RegionDetector {
 
         this.regions = [];
 
+        this.visited.fill(0);
+
         for(let y = 0; y < this.height; y++){
 
             for(let x = 0; x < this.width; x++){
@@ -56,19 +65,26 @@ class RegionDetector {
                     continue;
                 }
 
-                const region = this.floodFill(x, y, index);
+                const region =
+                    this.floodFill(x, y, index);
 
                 if(region.pixels.length >= this.minRegionSize){
 
                     this.regions.push(region);
-
                 }
             }
         }
 
+        this.createPalette();
+
         console.log(
             "Jumlah bidang:",
             this.regions.length
+        );
+
+        console.log(
+            "Jumlah warna:",
+            this.palette.length
         );
 
         return this.regions;
@@ -149,7 +165,7 @@ class RegionDetector {
 
         return {
 
-            id: this.regions.length + 1,
+            id: 0,
 
             color: this.getColor(startIndex),
 
@@ -157,31 +173,66 @@ class RegionDetector {
 
             size: size,
 
-            centerX: Math.round(totalX / size),
+            centerX:
+                Math.round(totalX / size),
 
-            centerY: Math.round(totalY / size)
+            centerY:
+                Math.round(totalY / size)
 
         };
     }
-    
+
+    createPalette(){
+
+        const paletteMap = new Map();
+
+        for(const region of this.regions){
+
+            const key =
+                this.colorKey(region.color);
+
+            if(!paletteMap.has(key)){
+
+                paletteMap.set(
+                    key,
+                    {
+                        number:
+                            paletteMap.size + 1,
+
+                        color:
+                            region.color
+                    }
+                );
+            }
+
+            region.number =
+                paletteMap.get(key).number;
+        }
+
+        this.palette =
+            Array.from(
+                paletteMap.values()
+            );
+    }
+
     drawBoundaries(ctx){
 
-        const output =
-            ctx.createImageData(
-                this.width,
-                this.height
-            );
+        ctx.save();
 
-        const outputData = output.data;
+        ctx.strokeStyle = "#000000";
+        ctx.lineWidth = 1;
 
-        for(let y = 0; y < this.height; y++){
+        for(const region of this.regions){
 
-            for(let x = 0; x < this.width; x++){
+            for(const index of region.pixels){
 
-                const index =
-                    this.getIndex(x, y);
+                const x =
+                    index % this.width;
 
-                let boundary = false;
+                const y =
+                    Math.floor(
+                        index / this.width
+                    );
 
                 if(x < this.width - 1){
 
@@ -189,7 +240,13 @@ class RegionDetector {
                         this.getIndex(x + 1, y);
 
                     if(!this.sameColor(index, right)){
-                        boundary = true;
+
+                        ctx.fillRect(
+                            x,
+                            y,
+                            1,
+                            1
+                        );
                     }
                 }
 
@@ -199,23 +256,52 @@ class RegionDetector {
                         this.getIndex(x, y + 1);
 
                     if(!this.sameColor(index, bottom)){
-                        boundary = true;
+
+                        ctx.fillRect(
+                            x,
+                            y,
+                            1,
+                            1
+                        );
                     }
-                }
-
-                if(boundary){
-
-                    const i = index * 4;
-
-                    outputData[i] = 0;
-                    outputData[i + 1] = 0;
-                    outputData[i + 2] = 0;
-                    outputData[i + 3] = 255;
-
                 }
             }
         }
 
-        ctx.putImageData(output, 0, 0);
+        ctx.restore();
     }
+
+    drawNumbers(ctx){
+
+        ctx.save();
+
+        ctx.font = "bold 14px Arial";
+
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        ctx.fillStyle = "#000000";
+
+        for(const region of this.regions){
+
+            if(region.size <
+                this.minRegionSize){
+
+                continue;
+            }
+
+            ctx.fillText(
+
+                region.number,
+
+                region.centerX,
+
+                region.centerY
+
+            );
+        }
+
+        ctx.restore();
+    }
+
 }
