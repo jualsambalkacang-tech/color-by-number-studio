@@ -43,6 +43,11 @@ img.onload = function(){
 const processor = new ImageProcessor(canvas);
 const imageData =
 processor.applyQuantization(6);
+    const detector = new RegionDetector(imageData, 20);
+
+const regions = detector.detect();
+
+console.log("Total bidang:", regions.length);
     const detector = new RegionDetector(imageData);
 
 const regions = detector.detect();
